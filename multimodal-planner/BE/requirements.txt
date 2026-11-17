@@ -1,6 +1,6 @@
-pandas
-overpy
-scikit-learn
-schedule
-requests
-kmedoids
+kmedoids==0.5.5
+overpy==0.7
+pandas==3.1.1
+requests==2.34.2
+schedule==1.2.2
+scikit-learn==1.9.1

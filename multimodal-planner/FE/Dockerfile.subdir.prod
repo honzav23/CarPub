@@ -22,6 +22,8 @@ RUN npm run buildToSubdir
 COPY ./FE/favicon.ico /dist
 
 FROM nginx:alpine
+# Security fixes newer than the base image
+RUN apk upgrade --no-cache
 COPY --from=fe /app/FE/dist /usr/share/nginx/html/carpub
 COPY --from=fe /app/FE/nginx.subdir.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
