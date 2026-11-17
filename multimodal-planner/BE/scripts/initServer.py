@@ -23,8 +23,11 @@ def run_server(dev_mode, skip):
     api_path = os.path.join(script_dir, '..')
     api_path = os.path.normpath(api_path)
 
-    env_file = '.env.dev' if dev_mode else '.env.prod'
-    subprocess.Popen(["deno", "--allow-all", f'--env-file={api_path}/{env_file}', f'{api_path}/api.ts'])
+    # The env file is optional: on the server the variables come from docker compose (env_file: .env)
+    # and the file is kept out of the image (.dockerignore)
+    env_file = os.path.join(api_path, '.env.dev' if dev_mode else '.env.prod')
+    env_arg = [f'--env-file={env_file}'] if os.path.isfile(env_file) else []
+    subprocess.Popen(["deno", "--allow-all", *env_arg, f'{api_path}/api.ts'])
 
 def main():
     dev_mode = True

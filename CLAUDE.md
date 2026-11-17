@@ -55,6 +55,8 @@ WAZE_URL=
 
 Šablona je v souboru `env.prod`. Proměnná `API_BASE_URL=/carpub` je nastavena přímo v `docker-compose.prod.yml` (není potřeba v `.env`).
 
+`.env` leží v kořeni projektu (mimo git), na server ho nahraje `./dexter.sh remote-sync CarPub` a backend ho dostane přes `env_file: .env` — stejně jako ostatní projekty. **Secrets nejsou v image**: `multimodal-planner/.dockerignore` vyřazuje `BE/.env*` z build contextu a `initServer.py` předává Denu `--env-file` jen pokud soubor existuje (lokální vývoj s `BE/.env.dev`). Starší image do 2026-03 měly `BE/.env.prod` zapečený.
+
 ---
 
 ## Build

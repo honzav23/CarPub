@@ -1,0 +1,4 @@
+# Backend secrets come from docker compose (env_file: .env), never bake them into the image.
+# FE/.env.prod stays: it only holds the public VITE_BACKEND_URL needed at build time.
+BE/.env*
+**/node_modules

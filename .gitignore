@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Backend env files (secrets come from the root .env via docker compose)
+multimodal-planner/BE/.env.*
