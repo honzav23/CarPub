@@ -7,6 +7,13 @@ services:
       - .env
     environment:
       - API_BASE_URL=/carpub
+    healthcheck:
+      # Deno image without wget/curl; python3 is there. transferStops = static list, ~6 ms
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/carpub/api/transferStops', timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     networks:
       - carpubNetwork
 
@@ -16,6 +23,12 @@ services:
     image: dexter.fit.vutbr.cz/carpub/carpub-frontend
     depends_on:
       - backend
+    healthcheck:
+      # 127.0.0.1, not localhost: busybox wget tries ::1 first, nginx listens on IPv4 only
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/carpub/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
       - carpubNetwork
 
@@ -24,9 +37,14 @@ services:
     image: nginx:alpine
     restart: unless-stopped
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - frontend
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
       - carpubNetwork
       - network
